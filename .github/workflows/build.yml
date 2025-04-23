@@ -49,6 +49,8 @@ jobs:
           files: |
             dotnet-angular/**
             dotnet-xunit-coverlet/**
+            Report Writer Utility/**
+            Utility/**
       - name: Run step if any file(s) in the .github folder change
         if: steps.changed-files.outputs.any_changed == 'true'
         shell: bash
@@ -60,6 +62,27 @@ jobs:
           for file in ${ALL_CHANGED_FILES}; do
             echo "$file was changed"
           done
+      - name: Build and analyze Report Writer Utility
+        if: steps.changed-files.outputs.any_changed == 'true' && contains(steps.changed-files.outputs.all_changed_files, 'Report Writer Utility')
+        shell: bash
+        run: |
+          echo "==========================="
+          echo "IM IN REPORT WRITER UTILITY"
+          echo "==========================="
+      - name: Build and analyze Utility
+        if: steps.changed-files.outputs.any_changed == 'true' && contains(steps.changed-files.outputs.all_changed_files, 'Utility')
+        shell: bash
+        run: |
+          echo "==========================="
+          echo "IM IN UTILITY"
+          echo "==========================="
+      - name: Build and analyze dotnet-xunit-coverlet
+        if: steps.changed-files.outputs.any_changed == 'true' && contains(steps.changed-files.outputs.all_changed_files, 'dotnet-xunit-coverlet')
+        shell: powershell
+        run: |
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"dotnet-combo-xunit-coverlet" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}"
+          dotnet build dotnet-xunit-coverlet/XUnit.Coverage.sln
+          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
 
       # Build and analyze projects depending on project modified (linked to id of changed-files)
       - name: Build and analyze dotnet-angular
