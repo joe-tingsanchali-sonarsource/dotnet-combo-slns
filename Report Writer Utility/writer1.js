@@ -5,3 +5,4 @@ laj=0;
 wefw=23;
 awleoia=0;
 aweofia=0;
+aweoifw=0;
