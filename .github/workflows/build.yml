@@ -49,7 +49,7 @@ jobs:
           files: |
             dotnet-angular/**
             dotnet-xunit-coverlet/**
-            Report Writer Utility/**
+            "Report Writer Utility/**"
             Utility/**
       - name: Run step if any file(s) in the .github folder change
         if: steps.changed-files.outputs.any_changed == 'true'
